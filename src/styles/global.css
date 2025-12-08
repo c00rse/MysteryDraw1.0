@@ -1,0 +1,318 @@
+/* Kolor akcentu */
+:root {
+    --accent-color: #df2874;
+    /* domyślny kolor akcentu */
+}
+
+
+/* Motywy i zmienne dla nich */
+:root[data-theme="light"] {
+    --main-color: #ffffff;
+    --bg-color: #F7F9FB;
+    --text-color: #171924;
+    --subtext-color: #17192480;
+}
+
+:root[data-theme="dark"] {
+    --main-color: #24252F;
+    --bg-color: #171924;
+    --text-color: #e3e3e3;
+    --subtext-color: #e3e3e380;
+}
+
+body {
+    margin: unset;
+    /* kolor tła */
+    background-color: var(--bg-color);
+
+    /* podstawowe ustawienia czcionki */
+    color: var(--text-color);
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
+
+    /* animacja przy zmianie motywu */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+button {
+    all: unset;
+
+    padding: 1.2rem;
+
+    border: none;
+    outline: none;
+
+    border: 2px var(--text-color) solid;
+    border-radius: 2.2rem;
+
+
+    color: var(--text-color);
+
+    cursor: pointer;
+
+    position: relative;
+    z-index: 1;
+
+}
+
+.btn-fill {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+}
+
+/* Glow animation */
+.btn-glow:before {
+    content: '';
+    background: linear-gradient(45deg,
+            var(--accent-color) 0%,
+            var(--accent-color) 60%,
+            white 60%,
+            white 67%,
+            var(--accent-color) 67%,
+            var(--accent-color) 100%);
+    background-size: 200%;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 2.2rem;
+
+    animation-direction: normal;
+}
+
+.btn-glow:active {
+    background: var(--bg-color);
+}
+
+.btn-glow:hover:before {
+    opacity: 1;
+    animation: glowing 3s linear infinite;
+}
+
+.btn-glow:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-color);
+    left: 0;
+    top: 0;
+    border-radius: 2.2rem;
+}
+
+
+@keyframes glowing {
+    0% {
+        background-position: 0% 0;
+    }
+
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+/*--------------------------*/
+
+/* Formularze pop-up */
+.form {
+    margin: 1.2rem 2rem 0 2rem;
+
+
+    height: 26rem;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: left;
+    justify-content: top;
+}
+
+.form>span {
+    margin: 2.2rem 0rem 3.2rem 0rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+}
+
+.inputWrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.inputWrapper>input {
+    all: unset;
+    background-color: #0000001c;
+    padding: 0.6rem 0.4rem;
+    border-bottom: 2px solid var(--main-color);
+    transition: border-bottom 0.3s ease-in-out;
+}
+
+.inputWrapper>input:hover {
+    border-bottom: 2px solid var(--accent-color);
+}
+
+.inputWrapper>input:focus {
+    border-bottom: 2px solid var(--accent-color);
+}
+
+
+.buttonsWrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.buttonsWrapper>button {
+    padding: 0.8rem 1rem;
+}
+
+.buttonsWrapper>button.btn-glow:after {
+    background: var(--main-color);
+}
+
+.buttonsWrapper>.ruler {
+    background-color: var(--subtext-color);
+    margin-inline: 0.9rem;
+    width: 2px;
+}
+
+.signWithGoogle {
+    border: unset;
+}
+
+.signWithGoogle>.content {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-weight: 600;
+    transition: color 0.3s ease-in-out;
+}
+
+.signWithGoogle>.content>.googleIcon {
+    fill: white;
+    width: 28px;
+    transition: fill 0.3s ease-in-out;
+}
+
+
+.underlineWrapper {
+    display: flex;
+    justify-content: center;
+}
+
+.underline {
+    margin-top: 0.2rem;
+    background-color: var(--main-color);
+    width: 10%;
+    height: 2px;
+    border-radius: 1px;
+    transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+}
+
+.signWithGoogle:hover .underline {
+    width: 93%;
+    background-color: var(--accent-color);
+}
+
+ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    border-bottom: 3px solid var(--main-color);
+    padding: 1.2rem;
+    cursor: pointer;
+}
+
+li.active {
+    border-bottom: 3px solid var(--accent-color);
+    font-weight: bold;
+    transition: border-bottom 0.3s;
+}
+
+li.hover {
+    border-bottom: 3px solid var(--accent-color);
+    font-weight: bold;
+    transition: border-bottom 0.3s;
+}
+
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 1rem;
+}
+
+.closeIcon {
+    padding: 1rem;
+    position: relative;
+}
+
+.closeIcon>svg {
+    width: 18px;
+    position: absolute;
+    top: calc(50% - 9px);
+    left: calc(50% - 9px);
+}
+
+.closeIcon:hover line {
+    stroke: var(--accent-color);
+    transition: stroke 0.3s ease-in-out;
+}
+
+.closeIcon:hover svg#x1 {
+    rotate: 90deg;
+    transition: rotate 0.3s ease-in-out;
+}
+
+.closeIcon:hover svg#x2 {
+    rotate: -90deg;
+    transition: rotate 0.3s ease-in-out;
+}
+
+line.x {
+    fill: none;
+    stroke: var(--text-color);
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+    stroke-width: 20px;
+}
+
+/* Tło */
+.PopUp {
+    /* Pozycja */
+    display: flex;
+    position: fixed;
+
+    top: 0%;
+    left: 0%;
+
+    justify-content: center;
+    align-items: center;
+
+    /* Format */
+    background-color: #24242462;
+    backdrop-filter: blur(8px);
+    width: 100vw;
+    height: 100vh;
+
+    z-index: 1;
+}
+
+.PopUp>section {
+    background-color: var(--main-color);
+    width: 26rem;
+}

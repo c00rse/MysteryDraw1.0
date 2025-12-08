@@ -1,0 +1,24 @@
+{
+  "name": "baasmysterydraw",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.4.2",
+    "@astrojs/sitemap": "^3.6.0",
+    "@nanostores/react": "^1.0.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "astro": "^5.15.4",
+    "astro-i18n-aut": "^0.7.3",
+    "firebase": "^12.6.0",
+    "nanostores": "^1.1.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

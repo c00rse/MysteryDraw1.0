@@ -1,0 +1,110 @@
+#FriendList {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+#FriendList>div>h2 {
+    margin: 0;
+    font-weight: 600;
+}
+
+#FriendList>div {
+    display: flex;
+    justify-content: space-between;
+    padding-inline: 0.5rem;
+}
+
+#FriendList>ul {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: block;
+    margin-top: 0.7rem;
+    padding: 0;
+}
+
+#FriendList>ul::-webkit-scrollbar {
+    display: none;
+}
+
+/* Zmiana w LI - dodajemy position relative dla pozycjonowania */
+#FriendList>ul>li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Rozsuwa info i krzyżyk */
+    margin: 0;
+    padding: 0.5rem;
+    
+    transition: background-color 0.1s ease-in-out;
+    border-radius: 0.7rem;
+    /* Granica dolna */
+    border-bottom: 3px solid var(--main-color);
+    cursor: default; /* Kursor domyślny, chyba że najedziemy na guzik */
+}
+
+/* Wrapper dla zdjęcia i tekstu, żeby trzymały się razem po lewej */
+.friend-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    pointer-events: none; /* Żeby tekst nie przeszkadzał w hoverze li */
+}
+
+#FriendList>ul>li:hover {
+    background-color: var(--subtext-color);
+}
+
+#FriendList>ul>li img {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+}
+
+#FriendList>ul>li h3 {
+    margin: 0;
+}
+
+/* --- STYLIZACJA KRZYŻYKA --- */
+.delete-btn {
+    all: unset; /* Reset domyślnych stylów buttona */
+    color: var(--text-color); /* Lub czerwony: #ff4444 */
+    font-weight: bold;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0 10px;
+    border-radius: 5px;
+    
+    /* Domyślnie niewidoczny */
+    opacity: 0;
+    transform: translateX(10px); /* Lekkie przesunięcie */
+    transition: all 0.2s ease-in-out;
+}
+
+.delete-btn:hover {
+    color: #ff4444; /* Czerwony przy najechaniu na sam krzyżyk */
+    scale: 1.2;
+}
+
+/* Gdy najeżdżamy na CAŁY element LI, pokaż krzyżyk */
+#FriendList>ul>li:hover .delete-btn {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+#add {
+    display: flex;
+    justify-content: center;
+    color: var(--subtext-color);
+    cursor: pointer;
+}
+
+.new-draw-container {
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+}
+.new-draw-btn {
+    padding: 0.5rem 1.5rem !important;
+    font-size: 1rem;
+}

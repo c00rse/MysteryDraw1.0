@@ -1,0 +1,81 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { LogOut } from "../components/LogOut";
+import UserProfile from "../components/UserProfile";
+import { FriendList } from "../components/FriendList";
+import Modal from "../components/Modal";
+import NameChangeModal from "../components/NameChangeModal";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
+// Import nowego modala
+import NewDrawModal from "../components/NewDrawModal";
+// Skrypt pobierający dane w React (poniżej stworzymy DashboardContent.jsx dla czystości)
+import DashboardDraws from "../components/DashboardDraws";
+---
+
+<BaseLayout>
+    <Modal client:only="react" />
+    <NameChangeModal client:only="react" />
+    <ConfirmDeleteModal client:only="react" />
+    
+    <NewDrawModal client:only="react" />
+
+    <section>
+        <div id="userProfile">
+            <UserProfile client:only="react" />
+        </div>
+
+        <div id="sidePanel">
+            <FriendList client:only="react" />
+        </div>
+
+        <DashboardDraws client:only="react" />
+    </section>
+
+    <div id="logout">
+        <LogOut client:only="react" />
+    </div>
+</BaseLayout>
+
+<style>
+/* Style bez zmian */
+    section {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80vw;
+        height: 80vh;
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
+    }
+
+    section > div {
+        background-color: var(--main-color);
+        margin: 0.5rem;
+        padding: 1rem;
+        border-radius: 1rem;
+    }
+
+    #sidePanel {
+        grid-column: 1 / 2;
+        grid-row: 2 / 5;
+    }
+
+    #ongoing {
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+    }
+
+    #finished {
+        grid-column: 2 / 3;
+        grid-row: 3 / 5;
+    }
+
+    #logout {
+        position: absolute;
+        bottom: 1%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+</style>

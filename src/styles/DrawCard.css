@@ -1,0 +1,87 @@
+.draw-card {
+    background: rgba(0,0,0,0.05); /* Lekkie tło karty wewnątrz panelu */
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s, background-color 0.2s;
+    border: 1px solid transparent;
+}
+
+.draw-card:hover { 
+    transform: scale(1.01); 
+    background: rgba(0,0,0,0.08);
+}
+
+/* LEFT SIDE */
+.card-left { display: flex; flex-direction: column; gap: 0.5rem; }
+.card-left h3 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+
+.avatars-row { display: flex; align-items: center; height: 40px; position: relative; margin-left: 5px; }
+.card-avatar {
+    width: 35px; height: 35px; border-radius: 50%;
+    border: 2px solid var(--main-color);
+    margin-left: -10px; /* Nachodzenie na siebie */
+    object-fit: cover;
+}
+/* Reset margin dla pierwszego */
+.card-avatar:first-child { margin-left: 0; }
+
+.extra-bubbles { position: relative; display: flex; margin-left: -5px; height: 35px; width: 40px;}
+.bubble-shadow, .bubble-text {
+    position: absolute;
+    width: 35px; height: 35px; border-radius: 50%;
+    background: #e0e0e0; border: 2px solid var(--main-color);
+}
+.bubble-text {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: bold; color: #555;
+    z-index: 2;
+}
+
+/* RIGHT SIDE */
+.card-right {
+    text-align: right;
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    gap: 8px; /* Odstęp między sekcją daty a budżetem */
+}
+
+/* Nowy układ daty */
+.deadline-box {
+    display: flex;
+    flex-direction: column; /* Ustawia elementy jeden pod drugim */
+    align-items: flex-end;  /* Wyrównuje do prawej */
+    line-height: 1.2;
+}
+
+.date { 
+    font-weight: 800; 
+    font-size: 1.2rem; 
+    color: var(--text-color); 
+}
+
+.days-left { 
+    font-size: 0.85rem; 
+    color: var(--accent-color); 
+    font-weight: 600;
+}
+
+.budget-box { 
+    font-weight: 600; 
+    font-size: 1rem; 
+    color: var(--subtext-color);
+}
+
+/* Finished State */
+.finished { opacity: 0.6; }
+.crossed { text-decoration: line-through; opacity: 0.8; }
+.status-finished {
+    font-style: italic; 
+    color: var(--subtext-color); 
+    font-weight: 400;
+    font-size: 0.85rem;
+}

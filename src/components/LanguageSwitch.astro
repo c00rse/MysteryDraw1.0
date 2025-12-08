@@ -1,0 +1,48 @@
+---
+import { getLocale } from "astro-i18n-aut";
+
+// Pobieramy aktualny język
+const currentLocale = getLocale(Astro.url);
+
+// Lista języków w kolejności cyklicznej
+const locales = ["en", "pl"];
+
+// Funkcja do zmiany języka
+function getNextLocale(current: string) {
+    const index = locales.indexOf(current);
+    return locales[(index + 1) % locales.length]; // przechodzi do następnego języka
+}
+
+// Generuje URL dla wybranego języka, zachowując ścieżkę
+function getLocaleUrl(locale: string) {
+    const parts = Astro.url.pathname.split("/").filter(Boolean);
+    if (parts.length && locales.includes(parts[0])) {
+        parts[0] = locale;
+    } else {
+        parts.unshift(locale);
+    }
+    return "/" + parts.join("/") + "/";
+}
+---
+
+<button
+    onclick={`window.location.href='${getLocaleUrl(getNextLocale(currentLocale))}'`}
+>
+    Change Language
+</button>
+
+<style>
+    button {
+        all: unset;
+        /* pozycja przycisku */
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+
+        /* styl przycisku */
+        padding: 8px 12px;
+        cursor: pointer;
+
+        color: var(--text-color);
+    }
+</style>

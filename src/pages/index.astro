@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Logo from "../components/Logo.astro";
+import SignForm from "../components/SignForm.jsx";
+import { t } from "../utils/i18n";
+
+// Zmienne językowe
+const indexButton = t("indexButton", Astro.url);
+const indexDescription = t("indexDescription", Astro.url);
+const Register = t("SignFormRegister", Astro.url);
+const Login = t("SignFormLogin", Astro.url);
+const RegisterText = t("registerText", Astro.url);
+const LoginText = t("loginText", Astro.url);
+---
+
+<BaseLayout>
+    <SignForm client:only="react" 
+              registerLabel={Register} 
+              loginLabel={Login} 
+              registerText={RegisterText} 
+              loginText={LoginText} 
+    />
+
+    <section id="container">
+        <Logo />
+        <div id="centerWrap">
+            <button id="auth-trigger" class="btn-glow">{indexButton}</button>
+            <p>{indexDescription}</p>
+        </div>
+    </section>
+</BaseLayout>
+
+<script>
+    // Importujemy store wewnątrz skryptu klienckiego
+    import { isLoginOpen } from "../utils/modalStore";
+
+    const btn = document.getElementById('auth-trigger');
+    if (btn) {
+        btn.addEventListener('click', () => {
+            // Otwieramy popup zmieniając stan atomu
+            isLoginOpen.set(true);
+        });
+    }
+</script>
+
+<style>
+    #container {
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #centerWrap {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+        justify-content: left;
+        font-size: 1.2rem;
+    }
+</style>

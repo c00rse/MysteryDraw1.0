@@ -1,0 +1,39 @@
+---
+let theme = "light";
+---
+
+<button id="theme-toggle">🌞</button>
+
+<script defer>
+    // Zapamiętujemy motyw w localStorage
+    const body = document.body;
+    const btn = document.getElementById("theme-toggle");
+
+    // Sprawdzenie czy jest zapisany motyw w pamięci
+    const savedTheme = localStorage.getItem("theme") || "light";
+    document.documentElement.dataset.theme = savedTheme;
+    updateButton(savedTheme);
+
+    btn.addEventListener("click", () => {
+        const current = document.documentElement.dataset.theme;
+        const next = current === "light" ? "dark" : "light";
+        document.documentElement.dataset.theme = next;
+        localStorage.setItem("theme", next);
+        updateButton(next);
+    });
+
+    function updateButton(theme) {
+        btn.textContent = theme === "light" ? "🌙" : "🌞";
+    }
+</script>
+
+<style>
+    /* stylizacja przycisku do zmiany motywu*/
+    button#theme-toggle {
+        all: unset;
+        font-size: 32px;
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+    }
+</style>
