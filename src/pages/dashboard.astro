@@ -6,18 +6,28 @@ import { FriendList } from "../components/FriendList";
 import Modal from "../components/Modal";
 import NameChangeModal from "../components/NameChangeModal";
 import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
-// Import nowego modala
 import NewDrawModal from "../components/NewDrawModal";
-// Skrypt pobierający dane w React (poniżej stworzymy DashboardContent.jsx dla czystości)
+import DrawDetailsModal from "../components/DrawDetailsModal";
 import DashboardDraws from "../components/DashboardDraws";
+import AccentSwitch from "../components/AccentSwitch.astro";
+import LanguageSwitch from "../components/LanguageSwitch.astro";
+
+// Import komponentu Logo
+import Logo from "../components/Logo.astro";
 ---
 
 <BaseLayout>
     <Modal client:only="react" />
     <NameChangeModal client:only="react" />
     <ConfirmDeleteModal client:only="react" />
-    
     <NewDrawModal client:only="react" />
+    <DrawDetailsModal client:only="react" />
+
+    <div id="dashboard-logo">
+        <Logo size="2.5rem" />
+    </div>
+
+    <LanguageSwitch />
 
     <section>
         <div id="userProfile">
@@ -31,13 +41,14 @@ import DashboardDraws from "../components/DashboardDraws";
         <DashboardDraws client:only="react" />
     </section>
 
+    <AccentSwitch />
+
     <div id="logout">
         <LogOut client:only="react" />
     </div>
 </BaseLayout>
 
 <style>
-/* Style bez zmian */
     section {
         position: absolute;
         top: 50%;
@@ -72,10 +83,32 @@ import DashboardDraws from "../components/DashboardDraws";
         grid-row: 3 / 5;
     }
 
+    #dashboard-logo {
+        position: absolute;
+        top: 1rem; /* Odstęp od góry */
+        left: 50%; /* Środek poziomo */
+        transform: translateX(-50%); /* Centrowanie */
+        z-index: 10; /* Nad tłem, pod modalem */
+
+        /* Zapobiega łamaniu tekstu na małych ekranach */
+        white-space: nowrap;
+
+        /* Opcjonalnie: cień pod tekstem dla lepszej czytelności */
+        /* text-shadow: 0 2px 10px rgba(0,0,0,0.2); */
+    }
+
+    /* Na telefonach logo jeszcze troszkę mniejsze */
+    @media (max-width: 600px) {
+        #dashboard-logo {
+            transform: translateX(-50%) scale(0.8); /* Skalujemy całość w dół */
+            top: 0.8rem;
+        }
+    }
+
     #logout {
         position: absolute;
-        bottom: 1%;
-        left: 50%;
-        transform: translateX(-50%);
+        bottom: 1.5rem;
+        right: 4.5rem;
+        z-index: 10;
     }
 </style>

@@ -1,6 +1,6 @@
 #ScreenBlur {
     display: flex;
-    position: absolute;
+    position: fixed; /* Zmieniono z absolute na fixed, żeby przy scrollowaniu strony modal zawsze pokrywał cały ekran */
 
     top: 0%;
     left: 0%;
@@ -14,7 +14,9 @@
     width: 100vw;
     height: 100vh;
 
-    z-index: 1;
+    /* ZMIANA TUTAJ: Wcześniej było 1, teraz dajemy bardzo dużo, 
+       żeby przykryło przyciski (które mają z-index ok. 10-20) */
+    z-index: 1000;
 
     transition: background-color 1s ease-in-out;
     transition: backdrop-filter 1s ease-in-out;
@@ -24,6 +26,9 @@
     background-color: var(--main-color);
     width: 26rem;
     padding: 3rem;
+    /* Dodajemy relatywną pozycję dla pewności */
+    position: relative;
+    z-index: 1001; /* Okno modala musi być wyżej niż jego tło */
 }
 
 input {

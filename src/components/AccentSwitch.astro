@@ -1,0 +1,91 @@
+---
+const colors = [
+    "#df2874", // Magenta
+    "#28df93", // Miętowy/Zielony
+    "#F77F00"  // Pomarańczowy
+];
+---
+
+<div id="accent-picker">
+    {colors.map((color) => (
+        <button 
+            class="color-circle" 
+            data-color={color} 
+            style={`background-color: ${color};`}
+            aria-label={`Zmień kolor akcentu na ${color}`}
+        ></button>
+    ))}
+</div>
+
+<script>
+    // Logika zmiany koloru
+    const buttons = document.querySelectorAll('.color-circle');
+    const root = document.documentElement;
+
+    // 1. Sprawdź czy mamy coś zapisanego, jak nie to domyślny różowy
+    const savedAccent = localStorage.getItem("accent-color") || "#df2874";
+    setAccent(savedAccent);
+
+    // 2. Obsługa kliknięć
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const color = btn.getAttribute('data-color');
+            setAccent(color);
+        });
+    });
+
+    function setAccent(color) {
+        // Ustaw zmienną CSS globalnie
+        root.style.setProperty('--accent-color', color);
+        // Zapisz w pamięci przeglądarki
+        localStorage.setItem("accent-color", color);
+        
+        // Aktualizacja wyglądu kółek (aktywna klasa)
+        buttons.forEach(btn => {
+            if (btn.getAttribute('data-color') === color) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+    }
+</script>
+
+<style>
+    #accent-picker {
+        position: absolute;
+        bottom: 1.5rem;
+        left: 70%; /* Zgodnie z życzeniem */
+        transform: translateX(-50%); /* Centrowanie względem punktu 70% */
+        
+        display: flex;
+        gap: 15px;
+        z-index: 10;
+        
+        /* Brak tła kontenera */
+        background: transparent;
+    }
+
+    .color-circle {
+        all: unset; /* Reset domyślnych stylów buttona */
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform 0.2s, box-shadow 0.2s;
+        box-sizing: border-box; /* Ważne dla bordera */
+        border: 2px solid transparent; /* Domyślny border przeźroczysty */
+    }
+
+    .color-circle:hover {
+        transform: scale(1.1);
+    }
+
+    /* Styl dla wybranego koloru */
+    .color-circle.active {
+        transform: scale(1.2);
+        /* Border w kolorze tekstu (czarny w light, biały w dark mode) */
+        border: 2px solid var(--text-color); 
+        box-shadow: 0 0 10px var(--accent-color);
+    }
+</style>

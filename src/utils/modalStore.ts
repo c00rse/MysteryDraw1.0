@@ -8,3 +8,5 @@ export const friendToDeleteId = atom<string | null>(null);
 
 export const isNewDrawOpen = atom(false); // Główny modal losowania
 export const isParticipantSelectorOpen = atom(false); // Modal wyboru znajomych do losowania
+
+export const selectedDraw = atom(null);

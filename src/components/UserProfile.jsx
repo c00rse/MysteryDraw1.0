@@ -1,10 +1,10 @@
 import "../styles/UserProfile.css";
 import useUserData from "../scripts/useUserData";
 import { isNameChangeOpen } from "../utils/modalStore";
-import { useClientTranslation } from "../utils/useClientTranslation"; // IMPORT
+import { useClientTranslation } from "../utils/useClientTranslation";
 
 export default function UserProfile() {
-    const { t } = useClientTranslation(); // UŻYCIE HOOKA
+    const { t } = useClientTranslation();
     const { picUrl, username, loading } = useUserData();
 
     const openChangeNameModal = () => {
@@ -12,7 +12,7 @@ export default function UserProfile() {
     };
 
     if (loading) {
-        return <p>{t("loading")}</p> // TŁUMACZENIE
+        return <p>{t("loading")}</p>
     }
 
     return (
@@ -25,9 +25,9 @@ export default function UserProfile() {
             <h3
                 onClick={openChangeNameModal}
                 style={{ cursor: "pointer" }}
-                title={t("changeNickTitle")} // TŁUMACZENIE
+                title={t("changeNickTitle")}
             >
-                {username || t("anonymous")} ✎ {/* TŁUMACZENIE */}
+                {username || t("anonymous")} ✎
             </h3>
         </>
     );

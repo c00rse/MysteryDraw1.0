@@ -5,10 +5,10 @@ import { doc, updateDoc, arrayRemove } from "firebase/firestore";
 import useUserData from "../scripts/useUserData";
 import { useStore } from '@nanostores/react';
 import { friendToDeleteId } from "../utils/modalStore";
-import { useClientTranslation } from "../utils/useClientTranslation"; // IMPORT
+import { useClientTranslation } from "../utils/useClientTranslation"; 
 
 export default function ConfirmDeleteModal() {
-    const { t } = useClientTranslation(); // UŻYCIE HOOKA
+    const { t } = useClientTranslation();
     const $friendId = useStore(friendToDeleteId);
     const { uid } = useUserData();
     const [isLoading, setIsLoading] = useState(false);
@@ -29,7 +29,7 @@ export default function ConfirmDeleteModal() {
             handleClose();
         } catch (error) {
             console.error("Error removing friend:", error);
-            alert(t("errorDelete")); // TŁUMACZENIE
+            alert(t("errorDelete"));
         } finally {
             setIsLoading(false);
         }
@@ -40,9 +40,9 @@ export default function ConfirmDeleteModal() {
     return (
         <div id="ScreenBlur" onClick={handleClose}>
             <section id="modalWindow" onClick={(e) => e.stopPropagation()}>
-                <h2 style={{color: '#ff4444'}}>{t("modalDeleteTitle")}</h2> {/* TŁUMACZENIE */}
+                <h2 style={{color: '#ff4444'}}>{t("modalDeleteTitle")}</h2> 
                 <p style={{margin: "20px 0", textAlign: "center"}}>
-                    {t("modalDeleteDesc")} {/* TŁUMACZENIE */}
+                    {t("modalDeleteDesc")}
                 </p>
                 
                 <div style={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: "20px" }}>
@@ -53,7 +53,7 @@ export default function ConfirmDeleteModal() {
                             border: "1px solid var(--text-color)" 
                         }}
                     >
-                        {t("cancel")} {/* TŁUMACZENIE */}
+                        {t("cancel")}
                     </button>
 
                     <button 

@@ -1,5 +1,5 @@
 .draw-card {
-    background: rgba(0,0,0,0.05); /* Lekkie tło karty wewnątrz panelu */
+    background: rgba(0,0,0,0.05);
     border-radius: 12px;
     padding: 1rem;
     margin-bottom: 1rem;
@@ -8,6 +8,11 @@
     align-items: center;
     transition: transform 0.2s, background-color 0.2s;
     border: 1px solid transparent;
+    
+    /* Zabezpieczenie szerokości */
+    width: 100%;
+    box-sizing: border-box; 
+    overflow: hidden; /* Na wszelki wypadek */
 }
 
 .draw-card:hover { 
@@ -15,21 +20,63 @@
     background: rgba(0,0,0,0.08);
 }
 
-/* LEFT SIDE */
-.card-left { display: flex; flex-direction: column; gap: 0.5rem; }
-.card-left h3 { margin: 0; font-size: 1.4rem; font-weight: 700; }
+/* --- LEFT SIDE --- */
+.card-left { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.5rem;
+    
+    /* KLUCZOWE ZMIANY DLA DŁUGICH TYTUŁÓW: */
+    flex: 1;      /* Zajmij całą dostępną przestrzeń */
+    min-width: 0; /* Pozwala kontenerowi się kurczyć poniżej szerokości zawartości */
+    padding-right: 10px; /* Odstęp od prawej strony */
+}
 
-.avatars-row { display: flex; align-items: center; height: 40px; position: relative; margin-left: 5px; }
+/* Kontener tytułu i diody (to ten div z style={{display: flex...}}) */
+.card-left > div:first-child {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* To też musi się kurczyć */
+    min-width: 0; 
+}
+
+.card-left h3 { 
+    margin: 0; 
+    font-size: 1.4rem; 
+    font-weight: 700;
+    
+    /* EFEKT WIELOKROPKA (...) */
+    white-space: nowrap;      /* Nie zawijaj tekstu */
+    overflow: hidden;         /* Ukryj to co wystaje */
+    text-overflow: ellipsis;  /* Dodaj ... */
+    max-width: 100%;          /* Nie wychodź poza rodzica */
+}
+
+.avatars-row { 
+    display: flex; 
+    align-items: center; 
+    height: 40px; 
+    position: relative; 
+    margin-left: 5px; 
+}
 .card-avatar {
     width: 35px; height: 35px; border-radius: 50%;
     border: 2px solid var(--main-color);
-    margin-left: -10px; /* Nachodzenie na siebie */
+    margin-left: -10px;
     object-fit: cover;
+    flex-shrink: 0; /* Nie ściskaj awatarów */
 }
-/* Reset margin dla pierwszego */
 .card-avatar:first-child { margin-left: 0; }
 
-.extra-bubbles { position: relative; display: flex; margin-left: -5px; height: 35px; width: 40px;}
+.extra-bubbles { 
+    position: relative; 
+    display: flex; 
+    margin-left: -5px; 
+    height: 35px; 
+    width: 40px;
+    flex-shrink: 0; 
+}
 .bubble-shadow, .bubble-text {
     position: absolute;
     width: 35px; height: 35px; border-radius: 50%;
@@ -41,20 +88,24 @@
     z-index: 2;
 }
 
-/* RIGHT SIDE */
+/* --- RIGHT SIDE --- */
 .card-right {
     text-align: right;
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
-    gap: 8px; /* Odstęp między sekcją daty a budżetem */
+    gap: 8px;
+    
+    /* Zabezpieczenie prawej strony */
+    flex-shrink: 0; /* Prawa strona (data/budżet) nigdy się nie skurczy */
+    min-width: fit-content; /* Zajmie tyle miejsca ile potrzebuje tekst */
 }
 
-/* Nowy układ daty */
+/* Układ daty */
 .deadline-box {
     display: flex;
-    flex-direction: column; /* Ustawia elementy jeden pod drugim */
-    align-items: flex-end;  /* Wyrównuje do prawej */
+    flex-direction: column;
+    align-items: flex-end;
     line-height: 1.2;
 }
 
@@ -62,18 +113,21 @@
     font-weight: 800; 
     font-size: 1.2rem; 
     color: var(--text-color); 
+    white-space: nowrap; /* Data w jednej linii */
 }
 
 .days-left { 
     font-size: 0.85rem; 
     color: var(--accent-color); 
     font-weight: 600;
+    white-space: nowrap;
 }
 
 .budget-box { 
     font-weight: 600; 
     font-size: 1rem; 
     color: var(--subtext-color);
+    white-space: nowrap;
 }
 
 /* Finished State */
@@ -84,4 +138,26 @@
     color: var(--subtext-color); 
     font-weight: 400;
     font-size: 0.85rem;
+    white-space: nowrap;
+}
+
+/* Dioda */
+.pulsing-diode {
+    width: 10px;
+    height: 10px;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    box-shadow: 0 0 0 rgba(223, 40, 116, 0.4);
+    animation: pulse 2s infinite;
+    flex-shrink: 0; /* Dioda zawsze okrągła, nie ściśnięta */
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(223, 40, 116, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(223, 40, 116, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(223, 40, 116, 0); }
+}
+
+.draw-card {
+    cursor: pointer;
 }

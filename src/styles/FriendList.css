@@ -28,7 +28,6 @@
     display: none;
 }
 
-/* Zmiana w LI - dodajemy position relative dla pozycjonowania */
 #FriendList>ul>li {
     display: flex;
     align-items: center;
@@ -40,15 +39,15 @@
     border-radius: 0.7rem;
     /* Granica dolna */
     border-bottom: 3px solid var(--main-color);
-    cursor: default; /* Kursor domyślny, chyba że najedziemy na guzik */
+    cursor: default; 
 }
 
-/* Wrapper dla zdjęcia i tekstu, żeby trzymały się razem po lewej */
+/* Wrapper dla zdjęcia i tekstu */
 .friend-info {
     display: flex;
     align-items: center;
     gap: 1rem;
-    pointer-events: none; /* Żeby tekst nie przeszkadzał w hoverze li */
+    pointer-events: none;
 }
 
 #FriendList>ul>li:hover {
@@ -67,8 +66,8 @@
 
 /* --- STYLIZACJA KRZYŻYKA --- */
 .delete-btn {
-    all: unset; /* Reset domyślnych stylów buttona */
-    color: var(--text-color); /* Lub czerwony: #ff4444 */
+    all: unset;
+    color: var(--text-color);
     font-weight: bold;
     font-size: 1.2rem;
     cursor: pointer;
@@ -77,16 +76,15 @@
     
     /* Domyślnie niewidoczny */
     opacity: 0;
-    transform: translateX(10px); /* Lekkie przesunięcie */
+    transform: translateX(10px);
     transition: all 0.2s ease-in-out;
 }
 
 .delete-btn:hover {
-    color: #ff4444; /* Czerwony przy najechaniu na sam krzyżyk */
+    color: #ff4444;
     scale: 1.2;
 }
 
-/* Gdy najeżdżamy na CAŁY element LI, pokaż krzyżyk */
 #FriendList>ul>li:hover .delete-btn {
     opacity: 1;
     transform: translateX(0);

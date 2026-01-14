@@ -1,13 +1,13 @@
 export function performDraw(participants) {
-    // participants to tablica UID: ["uid1", "uid2", "uid3"]
+
     let pool = [...participants];
-    let drawMap = {}; // Wynik: { "uid1": "uid2", ... }
+    let drawMap = {};
     let isValid = false;
 
     // Próbujemy wylosować tak długo, aż każdy wylosuje kogoś innego niż siebie
-    // Przy małej liczbie prób to bardzo szybkie
+
     while (!isValid) {
-        // Mieszamy pulę (Algorytm Fisher-Yates)
+        // Mieszamy pulę
         for (let i = pool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [pool[i], pool[j]] = [pool[j], pool[i]];

@@ -4,45 +4,86 @@ import { getLocale } from "astro-i18n-aut";
 // Pobieramy aktualny język
 const currentLocale = getLocale(Astro.url);
 
-// Lista języków w kolejności cyklicznej
+// Lista dostępnych języków
 const locales = ["en", "pl"];
 
-// Funkcja do zmiany języka
+// Funkcja obliczająca następny język (toggle)
 function getNextLocale(current: string) {
-    const index = locales.indexOf(current);
-    return locales[(index + 1) % locales.length]; // przechodzi do następnego języka
+    return current === "en" ? "pl" : "en";
 }
 
-// Generuje URL dla wybranego języka, zachowując ścieżkę
+// Funkcja generująca URL dla drugiego języka
 function getLocaleUrl(locale: string) {
     const parts = Astro.url.pathname.split("/").filter(Boolean);
+    
+    // Jeśli w URL jest już kod języka (np. /en/...), podmieniamy go
     if (parts.length && locales.includes(parts[0])) {
         parts[0] = locale;
     } else {
+        // Jeśli nie ma (np. strona główna), dodajemy go na początek
         parts.unshift(locale);
     }
     return "/" + parts.join("/") + "/";
 }
+
+const nextUrl = getLocaleUrl(getNextLocale(currentLocale));
 ---
 
-<button
-    onclick={`window.location.href='${getLocaleUrl(getNextLocale(currentLocale))}'`}
->
-    Change Language
-</button>
+<a href={nextUrl} class="lang-switch">
+    
+    <span class={currentLocale === "pl" ? "active" : "inactive"}>
+        PL
+    </span>
+
+    <span class="separator">|</span>
+
+    <span class={currentLocale === "en" ? "active" : "inactive"}>
+        EN
+    </span>
+
+</a>
 
 <style>
-    button {
-        all: unset;
-        /* pozycja przycisku */
+    .lang-switch {
+        /* Pozycjonowanie (takie samo jak wcześniej) */
         position: absolute;
         top: 1rem;
         right: 1rem;
+        z-index: 10;
 
-        /* styl przycisku */
-        padding: 8px 12px;
+        /* Układ */
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
         cursor: pointer;
+        text-decoration: none; /* Usuwa podkreślenie linku */
+        user-select: none;     /* Zapobiega zaznaczaniu tekstu przy klikaniu */
+        
+        transition: transform 0.1s ease-in-out;
+    }
 
+    .lang-switch:hover {
+        transform: scale(1.05); /* Lekkie powiększenie po najechaniu */
+    }
+
+    /* Aktywny język: Pogrubiony, kolor główny (biały w dark mode) */
+    .active {
         color: var(--text-color);
+        font-weight: 700; /* Bold */
+        font-size: 1.1rem;
+    }
+
+    /* Nieaktywny język: Cienki, kolor szary */
+    .inactive {
+        color: var(--subtext-color);
+        font-weight: 400; /* Thin / Regular */
+        font-size: 1rem;
+    }
+
+    /* Separator (kreska) */
+    .separator {
+        color: var(--subtext-color);
+        font-weight: 300;
     }
 </style>

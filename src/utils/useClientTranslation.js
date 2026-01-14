@@ -1,10 +1,8 @@
 import { translations } from "../data/translations";
 
 export const useClientTranslation = () => {
-    // Sprawdzamy, czy jesteśmy w środowisku przeglądarki
     const isBrowser = typeof window !== "undefined";
     
-    // Pobieramy język z URL (zakładając strukturę /pl/dashboard lub /en/dashboard)
     // Jeśli nie ma prefixu, domyślnie 'en'
     let locale = 'en';
     

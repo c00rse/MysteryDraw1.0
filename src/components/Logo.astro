@@ -1,5 +1,8 @@
 ---
 import { AnimatedText } from "./AnimatedText.jsx";
----
-<AnimatedText text="MysteryDraw" />
 
+// Odbieramy propsy w Astro
+const { size = "4rem" } = Astro.props;
+---
+
+<AnimatedText client:load text="MysteryDraw" fontSize={size} />

@@ -316,3 +316,18 @@ line.x {
     background-color: var(--main-color);
     width: 26rem;
 }
+
+/* Styl dla przycisku wylogowania */
+.logout-text-btn {
+    cursor: pointer;
+    color: var(--subtext-color);
+    font-weight: 400;
+    font-size: 1rem;
+    user-select: none;
+    transition: color 0.2s ease-in-out, transform 0.1s;
+}
+
+.logout-text-btn:hover {
+    color: var(--text-color);
+    transform: scale(1.05);
+}

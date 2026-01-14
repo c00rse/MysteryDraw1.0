@@ -3,36 +3,34 @@ import { db } from "../utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import "../styles/DrawCard.css";
 import { useClientTranslation } from "../utils/useClientTranslation";
+import useUserData from "../scripts/useUserData";
+import { selectedDraw } from "../utils/modalStore";
 
 export default function DrawCard({ drawData, isFinished }) {
     const { t } = useClientTranslation();
-    const { title, deadline, budget, currency, participantIds } = drawData;
+    const { seenDraws } = useUserData();
+    const { title, deadline, budget, currency, participantIds, id } = drawData;
     
-    // Obliczanie dni do końca
+    // Sprawdzamy czy losowanie jest "nowe"
+    // Jest nowe jeśli: NIE jest zakończone ORAZ id nie znajduje się w seenDraws
+    const isNew = !isFinished && seenDraws && !seenDraws.includes(id);
+
     const deadlineDate = deadline.toDate();
     const now = new Date();
     const diffTime = Math.abs(deadlineDate - now);
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-    
     const formattedDate = deadlineDate.toLocaleDateString();
 
-    // Pobieranie avatarów (max 6)
     const [avatars, setAvatars] = useState([]);
     
     useEffect(() => {
         const fetchAvatars = async () => {
-            // Pobierz tylko pierwsze 4 do wyświetlenia
             const idsToFetch = participantIds.slice(0, 4);
             const loaded = [];
-            
             for (const uid of idsToFetch) {
                 try {
                     const snap = await getDoc(doc(db, "users", uid));
-                    if (snap.exists()) {
-                        loaded.push(snap.data().picUrl || "/default.png");
-                    } else {
-                        loaded.push("/default.png");
-                    }
+                    loaded.push(snap.exists() ? (snap.data().picUrl || "/default.png") : "/default.png");
                 } catch(e) { loaded.push("/default.png"); }
             }
             setAvatars(loaded);
@@ -42,19 +40,26 @@ export default function DrawCard({ drawData, isFinished }) {
 
     const extraCount = participantIds.length - 4;
 
+    const handleClick = () => {
+        // Otwieramy modal przekazując dane losowania oraz flagę czy jest nowe
+        selectedDraw.set({ ...drawData, isNew: isNew });
+    };
+
     return (
-        <div className={`draw-card ${isFinished ? 'finished' : ''}`}>
+        <div className={`draw-card ${isFinished ? 'finished' : ''}`} onClick={handleClick}>
             <div className="card-left">
-                <h3>{title}</h3>
+                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                    <h3>{title}</h3>
+                    {/* DIODA */}
+                    {isNew && <div className="pulsing-diode"></div>}
+                </div>
+                
                 <div className="avatars-row">
                     {avatars.map((url, index) => (
                         <img key={index} src={url} className="card-avatar" alt="p" />
                     ))}
-                    
-                    {/* Jeśli jest więcej niż 4, pokaż kółka +X */}
                     {extraCount > 0 && (
                         <div className="extra-bubbles">
-                             {/* Atrapa kółek dla efektu 'nachodzenia' */}
                             <div className="bubble-shadow" style={{left: '0px'}}></div>
                             <div className="bubble-shadow" style={{left: '10px'}}></div>
                             <div className="bubble-text" style={{left: '20px'}}>+{extraCount}</div>
@@ -66,18 +71,14 @@ export default function DrawCard({ drawData, isFinished }) {
             <div className="card-right">
                 <div className="deadline-box">
                     <span className={`date ${isFinished ? 'crossed' : ''}`}>{formattedDate}</span>
-                    
                     {isFinished ? (
                         <span className="status-finished">{t("finished")}</span>
                     ) : (
                         <span className="days-left">{diffDays} {t("daysLeft")}</span>
                     )}
                 </div>
-                
                 {!isFinished && (
-                    <div className="budget-box">
-                        {budget} {currency}
-                    </div>
+                    <div className="budget-box">{budget} {currency}</div>
                 )}
             </div>
         </div>

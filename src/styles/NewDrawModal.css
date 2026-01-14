@@ -1,19 +1,47 @@
 .new-draw-modal {
-    width: 32rem !important; /* Szerszy modal */
+    width: 32rem !important;
     max-height: 90vh;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    
+    /* Ukrywamy scrollbar w samym modalu, żeby było ładniej (opcjonalne) */
+    scrollbar-width: none; 
 }
+.new-draw-modal::-webkit-scrollbar { display: none; }
 
+/* --- STYLIZACJA INPUTÓW --- */
 .new-draw-modal input {
-    background: #00000010;
+    background: #00000010; /* Lekko przyciemnione tło */
     border: none;
-    border-bottom: 2px solid var(--text-color);
+    border-bottom: 2px solid var(--text-color); /* Linia w kolorze tekstu */
     width: 100%;
     margin-bottom: 0.5rem;
     box-sizing: border-box;
+    padding: 8px; /* Trochę oddechu */
+    
+    /* WAŻNE: Kolor tekstu dopasowany do motywu (jasny w dark mode) */
+    color: var(--text-color); 
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.new-draw-modal input:focus {
+    outline: none;
+    border-bottom-color: var(--accent-color);
+}
+
+/* --- UKRYWANIE STRZAŁEK W INPUT NUMBER (Budżet) --- */
+/* Chrome, Safari, Edge, Opera */
+input[type=number]::-webkit-outer-spin-button,
+input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
 
 .row-inputs {
@@ -99,7 +127,7 @@
     color: white;
 }
 
-/* Friend Selector Overlay (Sub-modal) */
+/* --- FRIEND SELECTOR OVERLAY --- */
 .friend-selector-overlay {
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
@@ -109,25 +137,90 @@
     justify-content: center;
     align-items: center;
 }
+
 .friend-selector-box {
     background: var(--main-color);
     padding: 1rem;
     border-radius: 1rem;
     width: 250px;
-    max-height: 300px;
-    overflow-y: auto;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    /* Cień dla głębi */
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
 }
+
+.friend-selector-box h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+/* Lista znajomych - PIONOWA z SCROLLEM */
 .friend-selector-box ul {
-    list-style: none; padding: 0;
+    list-style: none; 
+    padding: 0;
+    margin: 0;
+    
+    display: flex;
+    flex-direction: column; /* Ustawienie pionowe */
+    
+    /* Ograniczenie wysokości do ok. 3.5 elementu */
+    /* Zakładając że element ma ok 50-55px */
+    max-height: 190px; 
+    
+    /* Włączenie scrolla */
+    overflow-y: auto;
+    
+    /* --- STYLIZACJA SCROLLBARA (jak w Dashboardzie) --- */
+    scrollbar-width: thin;
+    scrollbar-color: var(--subtext-color) transparent;
 }
+
+.friend-selector-box ul::-webkit-scrollbar {
+    width: 6px;
+}
+.friend-selector-box ul::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 0.2rem;
+}
+.friend-selector-box ul::-webkit-scrollbar-thumb {
+    background-color: var(--subtext-color);
+    border-radius: 10px;
+    opacity: 0.5;
+}
+.friend-selector-box ul::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-color);
+}
+
+/* Element listy */
 .friend-selector-box li {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px; border-bottom: 1px solid #ccc;
+    display: flex; 
+    align-items: center; 
+    gap: 15px;
+    padding: 10px; 
     cursor: pointer;
+    transition: background-color 0.2s;
 }
-.friend-selector-box li:hover { background: #00000010; }
-.friend-selector-box img { width: 30px; height: 30px; border-radius: 50%; }
+
+.friend-selector-box li:last-child {
+    border-bottom: none;
+}
+
+.friend-selector-box li:hover { 
+    background: rgba(0,0,0,0.05); /* Lekkie podświetlenie */
+}
+
+.friend-selector-box img { 
+    width: 30px; 
+    height: 30px; 
+    border-radius: 50%; 
+    object-fit: cover;
+}
+
+.friend-selector-box span {
+    color: var(--text-color);
+    font-weight: 500;
+}
 
 /* Loading Circle */
 .loading-view, .success-view {
@@ -147,9 +240,10 @@
 }
 .inner-circle {
     position: relative; z-index: 1; font-weight: bold; font-size: 1.5rem;
+    color: var(--text-color);
 }
 .success-view .checkmark {
-    font-size: 4rem; color: green; margin-bottom: 1rem;
+    font-size: 4rem; color: #28df93; margin-bottom: 1rem;
 }
 
 .modal-footer {

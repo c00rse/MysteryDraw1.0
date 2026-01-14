@@ -31,13 +31,12 @@ const LoginText = t("loginText", Astro.url);
 </BaseLayout>
 
 <script>
-    // Importujemy store wewnątrz skryptu klienckiego
+    // Importujemy store wewnątrz skryptu
     import { isLoginOpen } from "../utils/modalStore";
 
     const btn = document.getElementById('auth-trigger');
     if (btn) {
         btn.addEventListener('click', () => {
-            // Otwieramy popup zmieniając stan atomu
             isLoginOpen.set(true);
         });
     }
@@ -53,6 +52,7 @@ const LoginText = t("loginText", Astro.url);
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        gap: 2.5rem;
     }
     #centerWrap {
         display: flex;

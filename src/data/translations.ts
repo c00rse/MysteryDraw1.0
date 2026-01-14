@@ -66,7 +66,18 @@ export const translations = {
         finished: "finished",
 
         ongoingDraws: "Ongoing Draws",
-        finishedDraws: "Finished", // Lub "Finished Draws"
+        finishedDraws: "Finished",
+
+        // Draw Details / Animation
+        youDrew: "You drew:",
+        budget: "Budget:",
+        createdBy: "Created by",
+        participants: "Participants",
+        understood: "Understood",
+        holdToReveal: "Hold eye to reveal",
+        drawing: "Drawing...",
+
+        logOutBtn: "Log out",
     },
     pl: {
         // Strona główna
@@ -136,6 +147,17 @@ export const translations = {
 
         ongoingDraws: "Aktualne losowania",
         finishedDraws: "Zakończone",
+
+        // Draw Details / Animation
+        youDrew: "Wylosowałeś:",
+        budget: "Budżet:",
+        createdBy: "Utworzono przez",
+        participants: "Uczestnicy",
+        understood: "Zrozumiano",
+        holdToReveal: "Przytrzymaj oko by odkryć",
+        drawing: "Losowanie...",
+
+        logOutBtn: "Wyloguj",
     },
 } as const;
 

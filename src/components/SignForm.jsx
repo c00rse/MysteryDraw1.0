@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { auth } from "../utils/firebase";
 import { Register } from "./Register";
 import { Login } from "./Login";
-// Nano Store
 import { useStore } from '@nanostores/react';
 import { isLoginOpen } from "../utils/modalStore";
 

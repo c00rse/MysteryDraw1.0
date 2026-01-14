@@ -9,37 +9,82 @@ import { isNewDrawOpen, isParticipantSelectorOpen } from "../utils/modalStore";
 import { useClientTranslation } from "../utils/useClientTranslation";
 import { performDraw } from "../utils/drawLogic";
 
+/**
+ * Pod-komponent FriendSelector (WYDZIELONY NA ZEWNĄTRZ)
+ * Odpowiada za wyszukanie znajomych i wyświetlenie ich w formie listy do dodania.
+ */
+const FriendSelector = ({ isVisible, friendList, participants, onAdd }) => {
+    const [friendsData, setFriendsData] = useState([]);
+
+    useEffect(() => {
+        const fetchFriends = async () => {
+            const data = [];
+            for (const fUid of friendList) {
+                // Pomijamy osoby, które już są dodane do aktualnego losowania
+                if (participants.find(p => p.uid === fUid)) continue;
+
+                const snap = await getDoc(doc(db, "users", fUid));
+                if (snap.exists()) {
+                    data.push({ uid: fUid, ...snap.data() });
+                }
+            }
+            setFriendsData(data);
+        };
+        // Pobieramy dane tylko gdy okno jest widoczne
+        if (isVisible) fetchFriends();
+    }, [isVisible, friendList, participants]);
+
+    if (!isVisible) return null;
+
+    return (
+        <div className="friend-selector-overlay" onClick={(e) => { e.stopPropagation(); isParticipantSelectorOpen.set(false); }}>
+            <div className="friend-selector-box" onClick={(e) => e.stopPropagation()}>
+                <h3>Select friend</h3>
+                <ul>
+                    {friendsData.length === 0 && <p>No friends to add</p>}
+                    {friendsData.map(f => (
+                        <li key={f.uid} onClick={() => onAdd(f)}>
+                            <img src={f.picUrl || "/default.png"} alt="avatar"/>
+                            <span>{f.username}</span>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    );
+};
+
+/**
+ * Komponent NewDrawModal - Serce kreatora losowań.
+ */
 export default function NewDrawModal() {
     const { t } = useClientTranslation();
+    
+    // SUBSKRYPCJA STANU GLOBALNEGO (Nano Stores)
     const $isOpen = useStore(isNewDrawOpen);
     const $isSelectorOpen = useStore(isParticipantSelectorOpen);
     
     const { uid, username, picUrl, friendList } = useUserData();
 
-    // Formularz
+    // LOKALNE STANY FORMULARZA
     const [title, setTitle] = useState("");
     const [date, setDate] = useState("");
     const [budget, setBudget] = useState("");
     const [currency, setCurrency] = useState("PLN");
-    
-    // Lista uczestników
     const [participants, setParticipants] = useState([]);
 
-    // Stan ładowania / sukcesu
+    // STANY PROCESU TWORZENIA
     const [isProcessing, setIsProcessing] = useState(false);
     const [progress, setProgress] = useState(0);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    // --- NOWOŚĆ: Obliczanie daty minimalnej (Jutro) ---
     const getMinDate = () => {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
-        // Formatowanie do YYYY-MM-DD (wymagane przez input date)
         return tomorrow.toISOString().split('T')[0];
     };
     
     const minDateStr = getMinDate();
-    // --------------------------------------------------
 
     // Resetowanie stanu przy otwarciu
     useEffect(() => {
@@ -63,23 +108,15 @@ export default function NewDrawModal() {
     };
 
     const handleRemoveParticipant = (targetUid) => {
-        if (targetUid === uid) return;
+        if (targetUid === uid) return; 
         setParticipants(participants.filter(p => p.uid !== targetUid));
     };
 
     const handleCreateDraw = async () => {
-        // Podstawowa walidacja pól
         if (!title || !date || !budget || participants.length < 3) {
             alert("Please fill all fields and add at least 3 participants.");
             return;
         }
-
-        // --- NOWOŚĆ: Walidacja daty (bezpiecznik) ---
-        if (date < minDateStr) {
-            alert("Date must be tomorrow or later.");
-            return;
-        }
-        // --------------------------------------------
 
         setIsProcessing(true);
 
@@ -121,52 +158,18 @@ export default function NewDrawModal() {
         isNewDrawOpen.set(false);
     };
 
-    const FriendSelector = () => {
-        const [friendsData, setFriendsData] = useState([]);
-
-        useEffect(() => {
-            const fetchFriends = async () => {
-                const data = [];
-                for (const fUid of friendList) {
-                    if (participants.find(p => p.uid === fUid)) continue;
-
-                    const snap = await getDoc(doc(db, "users", fUid));
-                    if (snap.exists()) {
-                        data.push({ uid: fUid, ...snap.data() });
-                    }
-                }
-                setFriendsData(data);
-            };
-            if($isSelectorOpen) fetchFriends();
-        }, [$isSelectorOpen]);
-
-        if (!$isSelectorOpen) return null;
-
-        return (
-            <div className="friend-selector-overlay" onClick={() => isParticipantSelectorOpen.set(false)}>
-                <div className="friend-selector-box" onClick={(e) => e.stopPropagation()}>
-                    <h3>Select friend</h3>
-                    <ul>
-                        {friendsData.length === 0 && <p>No friends to add</p>}
-                        {friendsData.map(f => (
-                            <li key={f.uid} onClick={() => handleAddParticipant(f)}>
-                                <img src={f.picUrl || "/default.png"} alt="avatar"/>
-                                <span>{f.username}</span>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </div>
-        );
-    };
-
     if (!$isOpen) return null;
 
     return (
-        <div id="ScreenBlur">
-            <FriendSelector />
-            
+        <div id="ScreenBlur" onClick={handleClose}>
             <section id="modalWindow" className="new-draw-modal" onClick={(e) => e.stopPropagation()}>
+                <FriendSelector 
+                    isVisible={$isSelectorOpen}
+                    friendList={friendList}
+                    participants={participants}
+                    onAdd={handleAddParticipant}
+                />
+
                 {isSuccess ? (
                     <div className="success-view">
                         <div className="checkmark">✔</div>
@@ -183,18 +186,12 @@ export default function NewDrawModal() {
                 ) : (
                     <>
                         <h2>{t("createDrawTitle")}</h2>
-                        
                         <div className="form-content">
                             <label>{t("labelDrawTitle")}</label>
                             <input type="text" value={title} onChange={e => setTitle(e.target.value)} />
 
                             <label>{t("labelDate")}</label>
-                            <input 
-                                type="date" 
-                                min={minDateStr} /* --- NOWOŚĆ: Blokada w kalendarzu --- */
-                                value={date} 
-                                onChange={e => setDate(e.target.value)} 
-                            />
+                            <input type="date" min={minDateStr} value={date} onChange={e => setDate(e.target.value)} />
 
                             <div className="row-inputs">
                                 <div>
@@ -203,13 +200,7 @@ export default function NewDrawModal() {
                                 </div>
                                 <div>
                                     <label>{t("labelCurrency")}</label>
-                                    <input 
-                                        type="text" 
-                                        value={currency} 
-                                        maxLength={3}
-                                        onChange={e => setCurrency(e.target.value.toUpperCase())} 
-                                        style={{textTransform: 'uppercase'}}
-                                    />
+                                    <input type="text" value={currency} maxLength={3} onChange={e => setCurrency(e.target.value.toUpperCase())} style={{textTransform: 'uppercase'}} />
                                 </div>
                             </div>
 
@@ -224,16 +215,12 @@ export default function NewDrawModal() {
                                         <span>{p.username}</span>
                                     </div>
                                 ))}
-                                
                                 <div className="participant-bubble add-btn" onClick={() => isParticipantSelectorOpen.set(true)}>
-                                    <div className="avatar-wrapper circle-btn">
-                                        +
-                                    </div>
+                                    <div className="avatar-wrapper circle-btn"> + </div>
                                     <span>add</span>
                                 </div>
                             </div>
                         </div>
-
                         <div className="modal-footer">
                             <button onClick={handleCreateDraw} className="btn-glow">{t("btnCreateDraw")}</button>
                         </div>

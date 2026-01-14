@@ -4,10 +4,6 @@ import { db } from "../utils/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import useUserData from "../scripts/useUserData";
 
-// Importujemy atomy stanu z Nano Stores
-// friendToDeleteId - do usuwania znajomego
-// isFriendModalOpen - do dodawania znajomego
-// isNewDrawOpen - do otwierania kreatora losowania
 import { isFriendModalOpen, friendToDeleteId, isNewDrawOpen } from "../utils/modalStore";
 
 // Importujemy hook tłumaczeń
@@ -20,7 +16,7 @@ export const FriendList = () => {
     // Pobranie danych użytkownika
     const { uid, friendList } = useUserData();
     
-    // Lokalny stan do przechowywania pełnych danych znajomych (nick, avatar)
+    // Lokalny stan do przechowywania danych znajomych
     const [fullFriendsData, setFullFriendsData] = useState([]);
 
     // Efekt pobierający szczegóły znajomych, gdy zmieni się lista ID (friendList)
@@ -42,7 +38,7 @@ export const FriendList = () => {
 
                     // Czekamy na wszystkie zapytania
                     const results = await Promise.all(promises);
-                    // Filtrujemy puste wyniki (gdyby kogoś nie znaleziono)
+                    // Filtrujemy puste wyniki
                     setFullFriendsData(results.filter(item => item !== null));
 
                 } catch (error) {
@@ -58,11 +54,11 @@ export const FriendList = () => {
 
     // Funkcja otwierająca modal potwierdzenia usunięcia
     const openDeleteModal = (e, friendUid) => {
-        e.stopPropagation(); // Zapobiega kliknięciu w tło elementu
-        friendToDeleteId.set(friendUid); // Ustawienie ID otwiera ConfirmDeleteModal
+        e.stopPropagation();
+        friendToDeleteId.set(friendUid);
     };
 
-    // Jeśli użytkownik nie jest zalogowany (brak uid), nie renderujemy listy
+    // Sprawdzenie czy użytkownik jest zalogowany
     if (!uid) return null;
 
     return (
@@ -85,7 +81,7 @@ export const FriendList = () => {
                             <h3>{friend.username || t("unknownFriend")}</h3>
                         </div>
                         
-                        {/* Krzyżyk usuwania - pojawia się po najechaniu (CSS) */}
+                        {/* Usuwanie znajomych */}
                         <button 
                             className="delete-btn" 
                             onClick={(e) => openDeleteModal(e, friend.uid)}
@@ -96,13 +92,12 @@ export const FriendList = () => {
                     </li>
                 ))}
                 
-                {/* Element dodawania nowego znajomego */}
                 <li id="add" onClick={() => isFriendModalOpen.set(true)}>
                     <h3>{t("addFriendBtn")}</h3>
                 </li>
             </ul>
 
-            {/* Kontener na przycisk nowego losowania - przyklejony do dołu */}
+            {/* Przycisk New Draw */}
             <div className="new-draw-container">
                 <button 
                     className="btn-glow new-draw-btn" 
