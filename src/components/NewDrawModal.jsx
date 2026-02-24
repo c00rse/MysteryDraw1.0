@@ -9,10 +9,7 @@ import { isNewDrawOpen, isParticipantSelectorOpen } from "../utils/modalStore";
 import { useClientTranslation } from "../utils/useClientTranslation";
 import { performDraw } from "../utils/drawLogic";
 
-/**
- * Pod-komponent FriendSelector (WYDZIELONY NA ZEWNĄTRZ)
- * Odpowiada za wyszukanie znajomych i wyświetlenie ich w formie listy do dodania.
- */
+
 const FriendSelector = ({ isVisible, friendList, participants, onAdd }) => {
     const [friendsData, setFriendsData] = useState([]);
 
@@ -55,7 +52,7 @@ const FriendSelector = ({ isVisible, friendList, participants, onAdd }) => {
 };
 
 /**
- * Komponent NewDrawModal - Serce kreatora losowań.
+ * Komponent NewDrawModal
  */
 export default function NewDrawModal() {
     const { t } = useClientTranslation();

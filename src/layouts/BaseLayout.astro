@@ -1,14 +1,30 @@
 ---
 import LanguageSwitch from "../components/LanguageSwitch.astro";
 import ThemeSwitch from "../components/ThemeSwitch.astro";
-
 import "../styles/global.css";
 ---
 
 <html lang="en">
     <head>
+        <script
+            is:inline
+            async
+            src="https://www.googletagmanager.com/gtag/js?id=G-CSF3E2FJ26"
+        ></script>
+        <script is:inline>
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+                dataLayer.push(arguments);
+            }
+            gtag("js", new Date());
+
+            gtag("config", "G-CSF3E2FJ26");
+        </script>
+
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <title>MysteryDraw</title>
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -16,15 +32,11 @@ import "../styles/global.css";
             href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
             rel="stylesheet"
         />
-
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-
-        <title>MysteryDraw</title>
     </head>
 
     <body>
         <slot />
-        <ThemeSwitch/>
-        <LanguageSwitch/>
+        <ThemeSwitch />
+        <LanguageSwitch />
     </body>
 </html>
